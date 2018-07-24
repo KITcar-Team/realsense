@@ -78,6 +78,7 @@ Processing enabled by this node:
   <arg name="enable_pointcloud"   default="false"/>
   <arg name="enable_sync"         default="true"/>
   <arg name="align_depth"         default="true"/>
+  <arg name="points_xyz"          default="false"/>
 
   <!-- rgbd_launch specific arguments -->
 
@@ -99,7 +100,7 @@ Processing enabled by this node:
   <arg name="rgb_processing"                  default="true"/>
   <arg name="debayer_processing"              default="false" />
   <arg name="ir_processing"                   default="false"/>
-  <arg name="depth_processing"                default="false"/>
+  <arg name="depth_processing"                default="$(arg points_xyz)"/>
   <arg name="depth_registered_processing"     default="true"/>
   <arg name="disparity_processing"            default="false"/>
   <arg name="disparity_registered_processing" default="false"/>
@@ -156,6 +157,14 @@ Processing enabled by this node:
       <arg name="respawn"                       value="$(arg respawn)" />
       <arg name="rgb"                           value="$(arg rgb)" />
       <arg name="debayer_processing"            value="$(arg debayer_processing)" />
+    </include>
+
+    <include if="$(arg depth_processing)"
+             file="$(find rgbd_launch)/launch/includes/depth.launch.xml">
+      <arg name="manager"                       value="$(arg manager)" />
+      <arg name="respawn"                       value="$(arg respawn)" />
+      <arg name="points_xyz"                    value="$(arg points_xyz)" />
+      <arg name="depth"                         value="$(arg depth)" />
     </include>
 
     <group if="$(eval depth_registered_processing and sw_registered_processing)">
